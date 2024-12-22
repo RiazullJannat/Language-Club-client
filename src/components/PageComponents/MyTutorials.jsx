@@ -1,8 +1,7 @@
-
 const MyTutorials = () => {
     return (
         <div>
-            my tutorials is coming...
+            my MyTutorials
         </div>
     );
 };

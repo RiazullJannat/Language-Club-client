@@ -2,7 +2,7 @@
 const AddTutorials = () => {
     return (
         <div>
-            add tutorials coming ...
+            hey developer...... 
         </div>
     );
 };
