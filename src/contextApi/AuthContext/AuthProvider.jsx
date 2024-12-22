@@ -2,8 +2,11 @@ import AuthContext from "./AuthContext";
 import PropTypes from 'prop-types';
 
 const AuthProvider = ({children}) => {
+    const data={
+
+    }
     return (
-        <AuthContext.Provider>
+        <AuthContext.Provider value={data}>
             {children}
         </AuthContext.Provider>
     );
