@@ -4,21 +4,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import Loading from "../../common/Loading";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { setAuthLoading, authLoading, register } = useAuth();
+    const { setAuthLoading, authLoading, register, setUser } = useAuth();
     const handleSignUp = (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
         const formData = Object.fromEntries(form.entries())
         register(formData.email, formData.password)
-            .then(res => {
-                console.log(res.user)
+            .then((res)=> {
                 axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, formData)
-                    .then(res => {
-                        console.log(res.data)
+                    .then(() => {
+                        setUser(res.user)
+                        toast.success('Registered successfully.')
                         setAuthLoading(false)
                         navigate(location.state ? location.state : '/');
                     })

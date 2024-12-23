@@ -1,36 +1,34 @@
 
 import Lottie from 'lottie-react';
 import signinAnimation from '../../../assets/animations/login-animation.json'
-// import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import Loading from '../../common/Loading';
-// import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    // const { signIn, setUser, loading, setLoading } = useContext(AuthContext)
-    const {authLoading } = useAuth();
-    // const navigate = useNavigate();
-    // const location = useLocation();
+    const {authLoading,setAuthLoading, login, setUser } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
     const SignIn = (e) => {
         e.preventDefault();
-        // const email = e.target.email.value;
-        // const password = e.target.password.value;
-        // signIn(email, password)
-        //     .then(res => {
-        //         setUser(res.user)
-        //         setLoading(false)
-        //         const user = {email: email}
-        //         // navigate(location.state ? location.state : '/')
-        //             axios.post('http://localhost:3000/jwt', user, {withCredentials:true})
-        //             .then(res=>{
-        //                 console.log(res.data)
-        //             })
-        //         })
-        //     .catch(error => console.log(error.message))
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        login(email, password)
+            .then((res)=> {
+                setUser(res.user)
+                toast.success('login successfully.')
+                navigate(location.state?location.state:'/')
+                setAuthLoading(false)
+            })
+            .catch(error =>{
+                 toast.error(error.message)
+                 setAuthLoading(false)
+                })
     }
 
     if (authLoading) {
-        // return <Loading></Loading>
+        return <Loading></Loading>
     }
     return (
         <div className="hero bg-base-200 min-h-screen">
