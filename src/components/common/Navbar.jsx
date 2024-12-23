@@ -1,6 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
+    const { user } = useAuth();
     const links =
         <>
             <li><NavLink to={'/'}>Home</NavLink></li>
@@ -9,6 +11,21 @@ const Navbar = () => {
             <li><NavLink to={'/myTutorials'}>My Tutors</NavLink></li>
             <li><NavLink to={'/myBookedTutors'}>My Booked Tutors</NavLink></li>
         </>
+    const auth = user ?
+        <div className="dropdown">
+            <div><img src={user?.photoURL} alt={user?.displayName} /></div>
+            <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                <p>{user.displayName}</p>
+                <button>Logout</button>
+            </ul>
+        </div> :
+        <div>
+            <p className="flex gap-3 text-base font-bold">
+                <Link to={'/login'}>Login</Link> or <Link to={'/register'}>Register</Link>
+            </p>
+        </div>
     return (
         <div className="navbar bg-base-100">
             <div className="navbar-start">
@@ -30,7 +47,7 @@ const Navbar = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                            {links}
+                        {links}
                     </ul>
                 </div>
                 <a className="btn btn-ghost text-xl">Language Club</a>
@@ -41,7 +58,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <img src="" alt="" />
+                {auth}
             </div>
         </div>
     );

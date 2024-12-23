@@ -7,6 +7,9 @@ import FindTutors from "../components/PageComponents/FindTutors";
 import MyBookedTutors from "../components/PageComponents/MyBookedTutors";
 import AddTutorials from "../components/PageComponents/AddTutorials";
 import MyTutorials from "../components/PageComponents/MyTutorials";
+import Login from "../components/PageComponents/Auth/Login";
+import Register from "../components/PageComponents/Auth/Register";
+import Error from "../components/common/Error"
 
   const router = createBrowserRouter([
     {
@@ -32,9 +35,21 @@ import MyTutorials from "../components/PageComponents/MyTutorials";
         {
             path:'/myBookedTutors',
             element:<MyBookedTutors></MyBookedTutors>
+        },
+        {
+          path:'/login',
+          element:<Login></Login>
+        },
+        {
+          path:'/register',
+          element:<Register></Register>
         }
       ]
     },
+    {
+      path:'*',
+      element:<Error></Error>
+    }
   ]);
 
 
