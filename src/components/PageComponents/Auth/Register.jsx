@@ -3,11 +3,12 @@ import signupAnimation from "../../../assets/animations/sign-in.json"
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import Loading from "../../common/Loading";
+import axios from "axios";
 
 const Register = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const {setAuthLoading, authLoading, register } = useAuth();
+    const { setAuthLoading, authLoading, register } = useAuth();
     const handleSignUp = (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
@@ -15,10 +16,18 @@ const Register = () => {
         register(formData.email, formData.password)
             .then(res => {
                 console.log(res.user)
-                setAuthLoading(false)
-                navigate(location.state?location.state:'/');
+                axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, formData)
+                    .then(res => {
+                        console.log(res.data)
+                        setAuthLoading(false)
+                        navigate(location.state ? location.state : '/');
+                    })
+                    .catch(error => {
+                        setAuthLoading(false)
+                        console.log(error)
+                    })
             })
-            .catch(error=>{
+            .catch(error => {
                 console.log(error.message)
                 setAuthLoading(false)
             })
