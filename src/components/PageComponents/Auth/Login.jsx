@@ -4,10 +4,10 @@ import signinAnimation from '../../../assets/animations/login-animation.json'
 import useAuth from '../../../hooks/useAuth';
 import Loading from '../../common/Loading';
 import { toast } from 'react-toastify';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const {authLoading,setAuthLoading, login, setUser } = useAuth();
+    const { authLoading, setAuthLoading, login, setUser, withGoogle } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const SignIn = (e) => {
@@ -15,16 +15,28 @@ const Login = () => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         login(email, password)
-            .then((res)=> {
+            .then((res) => {
                 setUser(res.user)
                 toast.success('login successfully.')
-                navigate(location.state?location.state:'/')
+                navigate(location.state ? location.state : '/')
                 setAuthLoading(false)
             })
-            .catch(error =>{
-                 toast.error(error.message)
-                 setAuthLoading(false)
-                })
+            .catch(error => {
+                toast.error(error.message)
+                setAuthLoading(false)
+            })
+    }
+    const handleGoogle = () => {
+        withGoogle()
+            .then(() => {
+                toast.success('successfully login via google.')
+                navigate(location.state ? location.state : '/')
+                setAuthLoading(false)
+            })
+            .catch(error => {
+                toast.error(error.message)
+                setAuthLoading(false)
+            })
     }
 
     if (authLoading) {
@@ -55,8 +67,9 @@ const Login = () => {
                             </label>
                         </div>
                         <div className='flex-wrap flex gap-2'>
-                            {/* <Google></Google> */}
+                            <button className="border py-2 px-4 btn w-full" onClick={handleGoogle}>With Google</button>
                         </div>
+                        <p className='text-center'>Don&apos;t have an account? <span className="text-red-600"><Link to={'/register'}>Register</Link></span></p>
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Login</button>
                         </div>

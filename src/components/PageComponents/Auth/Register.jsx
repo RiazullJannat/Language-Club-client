@@ -1,6 +1,6 @@
 import Lottie from "lottie-react";
 import signupAnimation from "../../../assets/animations/sign-in.json"
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import Loading from "../../common/Loading";
 import axios from "axios";
@@ -102,6 +102,9 @@ const Register = () => {
                             <button className="btn btn-primary">Register</button>
                         </div>
                     </form>
+                    <div>
+                        <p className="text-center">Already have an account? <span className="text-red-600"><Link to={'/login'}>Login</Link></span></p>
+                    </div>
                     <div className="flex w-full flex-col border-opacity-50">   
                         <div className="divider">OR</div>    
                     </div>
