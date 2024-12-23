@@ -1,8 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const logOut = () => {
+        logout()
+        .then(()=> {
+            toast.success('logged out successfully.')
+        })
+        .catch(error=>toast.error(error.message))
+    }
     const links =
         <>
             <li><NavLink to={'/'}>Home</NavLink></li>
@@ -12,13 +20,32 @@ const Navbar = () => {
             <li><NavLink to={'/myBookedTutors'}>My Booked Tutors</NavLink></li>
         </>
     const auth = user ?
-        <div className="dropdown">
-            <div><img src={user?.photoURL} alt={user?.displayName} /></div>
+        <div className='dropdown dropdown-end z-50'>
+            <div
+                tabIndex={0}
+                role='button'
+                className='btn btn-ghost btn-circle avatar'
+            >
+                <div title={user?.displayName} className='w-10 rounded-full'>
+                    <img
+                        referrerPolicy='no-referrer'
+                        alt='User Profile Photo'
+                        src={user?.photoURL}
+                    />
+                </div>
+            </div>
             <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                <p>{user.displayName}</p>
-                <button>Logout</button>
+                className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'
+            >
+                <li className='mt-2'>
+                    <button
+                        onClick={logOut}
+                        className='bg-gray-200 block text-center'
+                    >
+                        Logout
+                    </button>
+                </li>
             </ul>
         </div> :
         <div>

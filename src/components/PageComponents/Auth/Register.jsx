@@ -9,14 +9,47 @@ import { toast } from "react-toastify";
 const Register = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { setAuthLoading, authLoading, register, setUser } = useAuth();
+    const { setAuthLoading, authLoading, register, setUser, update, withGoogle } = useAuth();
     const handleSignUp = (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
         const formData = Object.fromEntries(form.entries())
         register(formData.email, formData.password)
-            .then((res)=> {
-                axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, formData)
+            .then(() => {
+                update({ displayName: formData.name, photoURL: formData.photoURL })
+                    .then((res) => {
+                        const user = {
+                            displayName: formData.name,
+                            email: formData.email,
+                            photoURL: formData.photoURL,
+                        };
+                        axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, user)
+                            .then(() => {
+                                setUser(res.user)
+                                toast.success('Registered successfully.')
+                                setAuthLoading(false)
+                                navigate(location.state ? location.state : '/');
+                            })
+                            .catch(error => {
+                                setAuthLoading(false)
+                                console.log(error)
+                            })
+                    })
+            })
+            .catch(error => {
+                console.log(error.message)
+                setAuthLoading(false)
+            })
+    }
+    const handleGoogle = () => {
+        withGoogle()
+            .then((res) => {
+                const user = {
+                    displayName: res.user.displayName,
+                    email: res.user.email,
+                    photoURL: res.user.photoURL,
+                };
+                axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, user)
                     .then(() => {
                         setUser(res.user)
                         toast.success('Registered successfully.')
@@ -27,10 +60,6 @@ const Register = () => {
                         setAuthLoading(false)
                         console.log(error)
                     })
-            })
-            .catch(error => {
-                console.log(error.message)
-                setAuthLoading(false)
             })
     }
     if (authLoading) {
@@ -73,6 +102,12 @@ const Register = () => {
                             <button className="btn btn-primary">Register</button>
                         </div>
                     </form>
+                    <div className="flex w-full flex-col border-opacity-50">   
+                        <div className="divider">OR</div>    
+                    </div>
+                    <div className='flex-wrap flex gap-2 '>
+                        <button className="border py-2 px-4 btn w-full" onClick={handleGoogle}>With Google</button>
+                    </div>
                 </div>
             </div>
         </div>
