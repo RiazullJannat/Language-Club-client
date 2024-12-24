@@ -5,6 +5,9 @@ import Loading from "../common/Loading";
 import { toast } from "react-toastify";
 import { FaEdit, FaStar } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import Swal from "sweetalert2";
+import Modal from 'react-modal';
+
 
 const myTutorial = async (email) => {
     const result = await axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors`, { params: { email } })
@@ -13,10 +16,42 @@ const myTutorial = async (email) => {
 }
 const MyTutorials = () => {
     const { user } = useAuth();
-    const { data: myTutorials = [], isError, isLoading, error } = useQuery({
+    const { data: myTutorials = [], isError, isLoading, error, refetch } = useQuery({
         queryKey: ['MyTutorials'],
         queryFn: () => myTutorial(user.email)
     })
+const handleDelete = (id) =>{
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.delete(`${import.meta.env.VITE_BASE_URL}/delete-tutorial`,{params:{id}})
+          .then(res=>{
+            if(res.data.deletedCount){
+                refetch();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                  });
+            }
+          })
+          .catch(error=>{
+            Swal.fire({
+                title: "Error",
+                text: `${error.message}`,
+                icon: "error"
+              });
+          })
+        }
+      });
+}
     if (isLoading) {
         return <Loading></Loading>
     }
@@ -44,7 +79,7 @@ const MyTutorials = () => {
                         myTutorials.map((tutorial, ind) =>
                             <tr key={tutorial._id}>
                                 <th>
-                                    {ind+1}
+                                    {ind + 1}
                                 </th>
                                 <td>
                                     <div className="flex items-center gap-3">
@@ -62,14 +97,14 @@ const MyTutorials = () => {
                                     </div>
                                 </td>
                                 <td>
-                                   {tutorial.description}
+                                    {tutorial.description}
                                     <br />
                                     <span className="badge badge-ghost badge-sm">{tutorial.review}  <FaStar></FaStar></span>
                                 </td>
                                 <td>{tutorial.price}</td>
                                 <th>
-                                    <button className="btn btn-ghost btn-xs ml-2"><MdDeleteForever className="text-xl"/> Delete</button>
-                                    <button className="btn btn-ghost btn-xs"><FaEdit className="text-xl"/> Edit</button>
+                                    <button className="btn btn-ghost btn-xs ml-2" onClick={()=>handleDelete(tutorial._id)}><MdDeleteForever className="text-xl" /> Delete</button>
+                                    <button className="btn btn-ghost btn-xs"><FaEdit className="text-xl" /> Edit</button>
                                 </th>
                             </tr>
                         )
