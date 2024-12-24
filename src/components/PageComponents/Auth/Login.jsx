@@ -2,12 +2,11 @@
 import Lottie from 'lottie-react';
 import signinAnimation from '../../../assets/animations/login-animation.json'
 import useAuth from '../../../hooks/useAuth';
-import Loading from '../../common/Loading';
 import { toast } from 'react-toastify';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const { authLoading, setAuthLoading, login, setUser, withGoogle } = useAuth();
+    const {setAuthLoading, login, setUser, withGoogle } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const SignIn = (e) => {
@@ -39,9 +38,6 @@ const Login = () => {
             })
     }
 
-    if (authLoading) {
-        return <Loading></Loading>
-    }
     return (
         <div className="hero bg-base-200 min-h-screen">
             <div className="hero-content flex-col lg:flex-row-reverse">

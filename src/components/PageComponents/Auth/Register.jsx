@@ -2,14 +2,13 @@ import Lottie from "lottie-react";
 import signupAnimation from "../../../assets/animations/sign-in.json"
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-import Loading from "../../common/Loading";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const Register = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { setAuthLoading, authLoading, register, setUser, update, withGoogle } = useAuth();
+    const { setAuthLoading, register, setUser, update, withGoogle } = useAuth();
     const handleSignUp = (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
@@ -61,9 +60,6 @@ const Register = () => {
                         console.log(error)
                     })
             })
-    }
-    if (authLoading) {
-        return <Loading></Loading>
     }
     return (
         <div className="hero bg-base-200 min-h-screen">

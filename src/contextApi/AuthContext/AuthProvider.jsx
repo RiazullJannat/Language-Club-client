@@ -6,7 +6,7 @@ import app from '../../firebase/firebase.config.init'
 
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
-    const [authLoading, setAuthLoading] = useState(false);
+    const [authLoading, setAuthLoading] = useState(true);
     const auth = getAuth(app)
     const googleProvider = new GoogleAuthProvider();
 
@@ -25,16 +25,20 @@ const AuthProvider = ({children}) => {
     }
 
     const logout = () => {
+        setAuthLoading(true)
         return signOut(auth)
     }
 
     const withGoogle = () => {
+        setAuthLoading(true)
         return signInWithPopup( auth, googleProvider)
     }
     // track user
     useEffect(()=>{
+        setAuthLoading(true)
         const unSubscribe  = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
+            setAuthLoading(false)
             console.log("current user:--->", currentUser)
         })
         return ()=>{unSubscribe()};
