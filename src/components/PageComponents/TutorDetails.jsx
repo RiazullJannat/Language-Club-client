@@ -15,6 +15,10 @@ const TutorDetails = () => {
             tutor_email:email,
             image,
             price,
+            name,
+            language,
+            review,
+            description,
             bookBy:user.email,
         }
         console.log(data)
