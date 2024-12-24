@@ -1,10 +1,30 @@
-
+import axios from "axios";
+import PropTypes from "prop-types"; 
+import { useState } from "react";
+import { FaStar } from "react-icons/fa";
+import { toast } from "react-toastify";
+const setReview = async (tutorId) => {
+    const result = await axios.patch(`${import.meta.env.VITE_BASE_URL}/update-review?id=${tutorId}`,)
+    return result;
+}
 const PrivateTutorCard = ({tutor}) => {
-    const {tutor_id, image, price, }
+    const {tutor_id, image, price, language, name, review}=tutor;
+    const [localReview, setLocalReview] = useState(review);
+    const handleReview = () => {
+        setReview(tutor_id)
+        .then(res=>{
+            if(res.data.modifiedCount){
+                setLocalReview(localReview+1);
+                toast.success('reviewed successfully..')
+            }
+        })
+        .catch(error=>toast.error(error.message))
+    }
+    console.log(localReview)
     return (
-        <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+        <div className=" bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
             {/* Tutor Image */}
-            <img className="w-full h-48 object-cover" src={image} alt={`${name}`} />
+            <img className="w-full h-2/4 object-cover flex-grow" src={image} alt={`${name}`} />
 
             {/* Card Content */}
             <div className="p-4">
@@ -21,9 +41,10 @@ const PrivateTutorCard = ({tutor}) => {
                     <span className="font-medium">Price:</span> ${price}
                 </p>
 
-                {/* Review Button */}
+                {/* Review */}
+                <p> <span className="font-medium">Review:</span> <span className="flex items-center gap-2"><FaStar></FaStar>{localReview}</span></p>
                 <button
-                    onClick={handleReviewClick}
+                    onClick={handleReview}
                     className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
                 >
                     Review
@@ -32,5 +53,7 @@ const PrivateTutorCard = ({tutor}) => {
         </div>
     );
 };
-
+PrivateTutorCard.propTypes = {
+    tutor: PropTypes.object.isRequired,
+};
 export default PrivateTutorCard;

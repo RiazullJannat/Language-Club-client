@@ -24,7 +24,7 @@ const MyBookedTutors =  () => {
         toast.error(error.message)
     }
     return (
-        <div>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-7 my-10">
             {
                 bookedTutors.map(tutor=><PrivateTutorCard key={tutor._id} tutor={tutor}></PrivateTutorCard>)
             }

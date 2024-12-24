@@ -55,11 +55,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/myTutorials',
-        element: <MyTutorials></MyTutorials>
+        element: <Private><MyTutorials></MyTutorials></Private>
       },
       {
         path: '/myBookedTutors',
-        element: <MyBookedTutors></MyBookedTutors>
+        element: <Private><MyBookedTutors></MyBookedTutors></Private>
       },
       {
         path: '/login',
