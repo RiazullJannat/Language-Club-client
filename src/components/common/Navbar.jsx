@@ -1,15 +1,28 @@
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { RxSun } from "react-icons/rx";
+import { FaRegMoon } from "react-icons/fa";
+import { useEffect, useState } from "react";
+
 
 const Navbar = () => {
     const { user, logout } = useAuth();
+    const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'light');
+    useEffect(() => {
+        localStorage.setItem('theme', theme);
+        const localTheme = localStorage.getItem('theme')
+        document.querySelector('html').setAttribute('data-theme', localTheme)
+    }, [theme])
+    const onToggle = (e) => {
+        e.target.checked ? setTheme('dark') : setTheme('light')
+    }
     const logOut = () => {
         logout()
-        .then(()=> {
-            toast.success('logged out successfully.')
-        })
-        .catch(error=>toast.error(error.message))
+            .then(() => {
+                toast.success('logged out successfully.')
+            })
+            .catch(error => toast.error(error.message))
     }
     const links =
         <>
@@ -84,8 +97,20 @@ const Navbar = () => {
                     {links}
                 </ul>
             </div>
-            <div className="navbar-end">
+            <div className="navbar-end mx-5">
                 {auth}
+            </div>
+            <div>
+                <label className="swap swap-rotate">
+                    {/* this hidden checkbox controls the state */}
+                    <input type="checkbox" onChange={onToggle} checked={theme === 'light' ? false : true}/>
+
+                    {/* sun icon */}
+                    <RxSun className="swap-on h-10 w-10 fill-current" />
+
+                    {/* moon icon */}
+                    <FaRegMoon className="swap-off h-10 w-10 fill-current" />
+                </label>
             </div>
         </div>
     );
