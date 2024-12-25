@@ -39,14 +39,21 @@ const AuthProvider = ({ children }) => {
         setAuthLoading(true)
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
-            setAuthLoading(false)
-            if(currentUser){
-                axios.post(`${import.meta.env.VITE_BASE_URL}/login`, currentUser,{withCredentials:true})
-                .then(res => console.log(res.data))
+            
+            if(currentUser?.email){
+                const user = {email:currentUser.email}
+                axios.post(`${import.meta.env.VITE_BASE_URL}/login`,user,{withCredentials:true})
+                .then(res =>{ 
+                    console.log(res.data)
+                    setAuthLoading(false)
+                })
             }
             else{
                 axios.post(`${import.meta.env.VITE_BASE_URL}/logout`,{},{withCredentials:true})
-                .then(res=>console.log(res.data))
+                .then(res=>{
+                    console.log(res.data)
+                    setAuthLoading(false)
+                })
             }
             console.log("current user:--->", currentUser)
         })

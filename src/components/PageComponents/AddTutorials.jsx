@@ -8,6 +8,7 @@ const AddTutorials = () => {
         e.preventDefault();
         const form = new FormData(e.target);
         const formData = Object.fromEntries(form.entries());
+        formData.userImage = user.photoURL;
         axios.post(`${import.meta.env.VITE_BASE_URL}/addTutorial`, formData) 
         .then(()=>{
             toast.success('tutorial added successfully')

@@ -10,9 +10,9 @@ import Modal from 'react-modal';
 import { useState } from "react";
 import UpdateForm from "../UpdateForm";
 Modal.setAppElement('#root');
-
+// function for load tutorial data 
 const myTutorial = async (email) => {
-    const result = await axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors`, { params: { email } })
+    const result = await axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors`, { params: { email }, withCredentials:true })
     console.log(result.data);
     return result.data
 }
@@ -20,6 +20,8 @@ const MyTutorials = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedTutorial, setSelectedTutorial] = useState(null);
     const { user } = useAuth();
+    
+    // loading my tutorials data
     const { data: myTutorials = [], isError, isLoading, error, refetch } = useQuery({
         queryKey: ['MyTutorials'],
         queryFn: () => myTutorial(user.email)

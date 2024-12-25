@@ -28,8 +28,8 @@ const Navbar = () => {
         <>
             <li><NavLink to={'/'}>Home</NavLink></li>
             <li><NavLink to={'/findTutors'}>Find Tutors</NavLink></li>
-            <li><NavLink to={'/addTutorials'}>Add Tutors</NavLink></li>
-            <li><NavLink to={'/myTutorials'}>My Tutors</NavLink></li>
+            <li><NavLink to={'/addTutorials'}>Add Tutorials</NavLink></li>
+            <li><NavLink to={'/myTutorials'}>My Tutorials</NavLink></li>
             <li><NavLink to={'/myBookedTutors'}>My Booked Tutors</NavLink></li>
         </>
     const auth = user ?
