@@ -3,8 +3,9 @@ import AuthContext from "./AuthContext";
 import PropTypes from 'prop-types';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import app from '../../firebase/firebase.config.init'
+import axios from "axios";
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
     const auth = getAuth(app)
@@ -31,19 +32,27 @@ const AuthProvider = ({children}) => {
 
     const withGoogle = () => {
         setAuthLoading(true)
-        return signInWithPopup( auth, googleProvider)
+        return signInWithPopup(auth, googleProvider)
     }
     // track user
-    useEffect(()=>{
+    useEffect(() => {
         setAuthLoading(true)
-        const unSubscribe  = onAuthStateChanged(auth, currentUser => {
+        const unSubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
             setAuthLoading(false)
+            if(currentUser){
+                axios.post(`${import.meta.env.VITE_BASE_URL}/login`, currentUser,{withCredentials:true})
+                .then(res => console.log(res.data))
+            }
+            else{
+                axios.post(`${import.meta.env.VITE_BASE_URL}/logout`,{},{withCredentials:true})
+                .then(res=>console.log(res.data))
+            }
             console.log("current user:--->", currentUser)
         })
-        return ()=>{unSubscribe()};
-    },[auth])
-    const data={
+        return () => { unSubscribe() };
+    }, [auth])
+    const data = {
         user,
         authLoading,
         setAuthLoading,
