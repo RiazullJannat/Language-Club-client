@@ -7,7 +7,9 @@ import { FaEdit, FaStar } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Swal from "sweetalert2";
 import Modal from 'react-modal';
-
+import { useState } from "react";
+import UpdateForm from "../UpdateForm";
+Modal.setAppElement('#root');
 
 const myTutorial = async (email) => {
     const result = await axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors`, { params: { email } })
@@ -15,43 +17,63 @@ const myTutorial = async (email) => {
     return result.data
 }
 const MyTutorials = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedTutorial, setSelectedTutorial] = useState(null);
     const { user } = useAuth();
     const { data: myTutorials = [], isError, isLoading, error, refetch } = useQuery({
         queryKey: ['MyTutorials'],
         queryFn: () => myTutorial(user.email)
     })
-const handleDelete = (id) =>{
-    Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axios.delete(`${import.meta.env.VITE_BASE_URL}/delete-tutorial`,{params:{id}})
-          .then(res=>{
-            if(res.data.deletedCount){
-                refetch();
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                  });
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`${import.meta.env.VITE_BASE_URL}/delete-tutorial`, { params: { id } })
+                    .then(res => {
+                        if (res.data.deletedCount) {
+                            refetch();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: "Error",
+                            text: `${error.message}`,
+                            icon: "error"
+                        });
+                    })
             }
-          })
-          .catch(error=>{
-            Swal.fire({
-                title: "Error",
-                text: `${error.message}`,
-                icon: "error"
-              });
-          })
-        }
-      });
-}
+        });
+    }
+    const handleEdit = (tutorial) => {
+        setSelectedTutorial(tutorial);
+        setIsOpen(true);
+    }
+    const handleUpdate = (e) => {
+        e.preventDefault()
+        const form = new FormData(e.target);
+        const formData = Object.fromEntries(form.entries())
+        axios.patch(`${import.meta.env.VITE_BASE_URL}/update-tutorial?id=${selectedTutorial._id}`,formData)
+        .then(res=>{
+            if(res.data.modifiedCount){
+                toast.success("updated successfully")
+                refetch();
+                setIsOpen(false);
+            }
+        })
+        .catch(error=>toast.error(error.message))
+    }
     if (isLoading) {
         return <Loading></Loading>
     }
@@ -103,14 +125,27 @@ const handleDelete = (id) =>{
                                 </td>
                                 <td>{tutorial.price}</td>
                                 <th>
-                                    <button className="btn btn-ghost btn-xs ml-2" onClick={()=>handleDelete(tutorial._id)}><MdDeleteForever className="text-xl" /> Delete</button>
-                                    <button className="btn btn-ghost btn-xs"><FaEdit className="text-xl" /> Edit</button>
+                                    <button className="btn btn-ghost btn-xs ml-2" onClick={() => handleDelete(tutorial._id)}><MdDeleteForever className="text-xl" /> Delete</button>
+                                    <button
+                                        className="btn btn-ghost btn-xs"
+                                        onClick={()=>handleEdit(tutorial)} 
+                                    >
+                                        <FaEdit className="text-xl" /> Edit
+                                    </button>
                                 </th>
                             </tr>
                         )
                     }
                 </tbody>
             </table>
+            <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
+                    <UpdateForm 
+                        tutorial={selectedTutorial}
+                        handleUpdate={handleUpdate}
+                    >
+                    </UpdateForm>
+                <button onClick={() => setIsOpen(false)}>Close</button>
+            </Modal>
         </div>
     );
 };

@@ -1,11 +1,30 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import Loading from "./common/Loading";
+import { toast } from "react-toastify";
 
+const getUserTutor = async () => {
+    const {data} = await  axios.get(`${import.meta.env.VITE_BASE_URL}/count`)
+    return data;
+}
 const Stats = () => {
+    const {data:userTutor=[], isLoading, isError, error} = useQuery({
+        queryKey:'UserTutor',
+        queryFn:getUserTutor,
+    })
+    console.log(userTutor)
     const stats = [
-        { value: "32,000+", label: "Experienced tutors" },
-        { value: "300,000+", label: "5-star tutor reviews" },
-        { value: "120+", label: "Subjects taught" },
-        { value: "180+", label: "Tutor nationalities" },
+        { value: `${userTutor.tutorCount}+`, label: "Experienced tutors" },
+        { value: `${userTutor.totalReviewCount}+`, label: "Total reviews" },
+        { value: `${userTutor.totalLanguages}+`, label: "Languages" },
+        { value: `${userTutor.count}+`, label: "Our users" },
     ];
+    if(isLoading){
+        return <Loading></Loading>
+    }
+    if(isError){
+        toast.error(error.message)
+    }
     return (
         <div className="bg-base-100 py-10">
             <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">

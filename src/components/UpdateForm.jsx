@@ -1,23 +1,10 @@
-import axios from "axios";
-import useAuth from "../../hooks/useAuth";
-import { toast } from "react-toastify";
-
-const AddTutorials = () => {
-    const {user} = useAuth();
-     const handleSubmit = (e) => {
-        e.preventDefault();
-        const form = new FormData(e.target);
-        const formData = Object.fromEntries(form.entries());
-        axios.post(`${import.meta.env.VITE_BASE_URL}/addTutorial`, formData) 
-        .then(()=>{
-            toast.success('tutorial added successfully')
-        })
-        .catch(error=> toast.error(error.message))
-     }
+import PropTypes from "prop-types";
+const UpdateForm = ({ tutorial, handleUpdate }) => {
+    
     return (
         <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded my-10">
             <h2 className="text-2xl font-bold text-center mb-6">Add Tutorial</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleUpdate}>
                 {/* Name Field */}
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2" htmlFor="name">
@@ -26,7 +13,7 @@ const AddTutorials = () => {
                     <input
                         name="name"
                         type="text"
-                        defaultValue={user?.displayName}
+                        defaultValue={tutorial?.name}
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                         readOnly
                     />
@@ -40,7 +27,7 @@ const AddTutorials = () => {
                     <input
                         name="email"
                         type="email"
-                        defaultValue={user?.email}
+                        defaultValue={tutorial?.email}
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                         readOnly
                     />
@@ -55,6 +42,7 @@ const AddTutorials = () => {
                         name="image"
                         type="url"
                         placeholder="Enter image URL"
+                        defaultValue={tutorial.image}
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>
@@ -68,6 +56,7 @@ const AddTutorials = () => {
                         name="language"
                         type="text"
                         placeholder="Enter tutorial language"
+                        defaultValue={tutorial.language}
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>
@@ -80,7 +69,8 @@ const AddTutorials = () => {
                     <input
                         name="price"
                         type="number"
-                        placeholder="Enter price"
+                        defaultValue={tutorial.price}
+                        placeholder="Enter price "
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>
@@ -93,6 +83,7 @@ const AddTutorials = () => {
                     <textarea
                         name="description"
                         placeholder="Enter description"
+                        defaultValue={tutorial.description}
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     ></textarea>
                 </div>
@@ -104,7 +95,7 @@ const AddTutorials = () => {
                     </label>
                     <input
                         name="review"
-                        value={0}
+                        defaultValue={tutorial.review}
                         type="number"
                         placeholder="Review (default 0)"
                         className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
@@ -123,5 +114,8 @@ const AddTutorials = () => {
         </div>
     );
 };
-
-export default AddTutorials;
+UpdateForm.propTypes = {
+    tutorial: PropTypes.object,
+    handleUpdate:PropTypes.func,
+  };
+export default UpdateForm;

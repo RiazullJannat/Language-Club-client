@@ -21,6 +21,7 @@ const Register = () => {
                             displayName: formData.name,
                             email: formData.email,
                             photoURL: formData.photoURL,
+                            role:'user',
                         };
                         axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, user)
                             .then(() => {
@@ -47,6 +48,7 @@ const Register = () => {
                     displayName: res.user.displayName,
                     email: res.user.email,
                     photoURL: res.user.photoURL,
+                    role:'user',
                 };
                 axios.post(`${import.meta.env.VITE_BASE_URL}/addUser`, user)
                     .then(() => {
