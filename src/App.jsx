@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify'
 
 function App() {
   return (
-    <div>
+    <div className='overflow-hidden'>
       <Navbar></Navbar>
       <div className='w-11/12 mx-auto'>
         <ToastContainer></ToastContainer>
