@@ -76,5 +76,4 @@ const router = createBrowserRouter([
   }
 ],{fallbackElement});
 
-
 export default router;

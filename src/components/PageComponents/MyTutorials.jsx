@@ -13,7 +13,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 Modal.setAppElement('#root');
 // function for load tutorial data 
 const myTutorial = async (axiosInstance,email) => {
-    const result = await axios.get(`${import.meta.env.VITE_BASE_URL}/my-tutorials`, { params: { email }})
+    const result = await axiosInstance.get(`/my-tutorials`, { params: { email }})
     return result.data
 }
 const MyTutorials = () => {
