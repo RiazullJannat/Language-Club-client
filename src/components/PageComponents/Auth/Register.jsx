@@ -14,9 +14,9 @@ const Register = () => {
         const form = new FormData(e.target);
         const formData = Object.fromEntries(form.entries())
         register(formData.email, formData.password)
-            .then(() => {
+            .then((res) => {
                 update({ displayName: formData.name, photoURL: formData.photoURL })
-                    .then((res) => {
+                    .then(() => {
                         const user = {
                             displayName: formData.name,
                             email: formData.email,
@@ -32,12 +32,12 @@ const Register = () => {
                             })
                             .catch(error => {
                                 setAuthLoading(false)
-                                console.log(error)
+                                toast.error(error.message)
                             })
                     })
             })
             .catch(error => {
-                console.log(error.message)
+                toast.error(error.message)
                 setAuthLoading(false)
             })
     }
@@ -59,7 +59,7 @@ const Register = () => {
                     })
                     .catch(error => {
                         setAuthLoading(false)
-                        console.log(error)
+                        toast.error(error)
                     })
             })
     }

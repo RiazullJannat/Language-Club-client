@@ -1,20 +1,21 @@
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import useAxios from "../../hooks/useAxios";
 
 const AddTutorials = () => {
-    const {user} = useAuth();
-     const handleSubmit = (e) => {
+    const { user } = useAuth();
+    const simpleAxios = useAxios();
+    const handleSubmit = (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
         const formData = Object.fromEntries(form.entries());
         formData.userImage = user.photoURL;
-        axios.post(`${import.meta.env.VITE_BASE_URL}/addTutorial`, formData) 
-        .then(()=>{
-            toast.success('tutorial added successfully')
-        })
-        .catch(error=> toast.error(error.message))
-     }
+        simpleAxios.post(`/addTutorial`, formData)
+            .then(() => {
+                toast.success('tutorial added successfully')
+            })
+            .catch(error => toast.error(error.message))
+    }
     return (
         <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded my-10">
             <h2 className="text-2xl font-bold text-center mb-6">Add Tutorial</h2>

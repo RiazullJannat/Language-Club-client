@@ -1,22 +1,23 @@
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../common/Loading";
 import { toast } from "react-toastify";
 import PrivateTutorCard from "../PrivateTutorCard";
-const getBookedTutors =async (email) => {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/booked-tutors`, {
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
+const getBookedTutors =async (axiosInstance,email) => {
+    const res = await axiosInstance.get(`/booked-tutors`, {
         params:{email}
     });
     return res.data;
 }
 const MyBookedTutors =  () => {
+    const axiosInstance = useAxiosSecure()
     const {user} = useAuth();
-    const {data:bookedTutors=[],isLoading, isError, error} =useQuery({
+    const {data:bookedTutors=[],isLoading, isError, error, refetch} =useQuery({
         queryKey: ['bookedTutors'],
-        queryFn: ()=>getBookedTutors(user.email),
+        queryFn: ()=>getBookedTutors(axiosInstance,user.email),
     })
-    console.log(bookedTutors)
     if(isLoading){
         return <Loading></Loading>
     }
@@ -26,7 +27,7 @@ const MyBookedTutors =  () => {
     return (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-7 my-10">
             {
-                bookedTutors.map(tutor=><PrivateTutorCard key={tutor._id} tutor={tutor}></PrivateTutorCard>)
+                bookedTutors.map(tutor=><PrivateTutorCard key={tutor._id} tutor={tutor} refetch={refetch}></PrivateTutorCard>)
             }
         </div>
     );

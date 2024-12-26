@@ -1,26 +1,26 @@
 import axios from "axios";
 import PropTypes from "prop-types"; 
-import { useState } from "react";
+// import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 const setReview = async (tutorId) => {
     const result = await axios.patch(`${import.meta.env.VITE_BASE_URL}/update-review?id=${tutorId}`,)
     return result;
 }
-const PrivateTutorCard = ({tutor}) => {
+const PrivateTutorCard = ({tutor, refetch}) => {
     const {tutor_id, image, price, language, name, review}=tutor;
-    const [localReview, setLocalReview] = useState(review);
+    // const [localReview, setLocalReview] = useState(review);
     const handleReview = () => {
         setReview(tutor_id)
         .then(res=>{
             if(res.data.modifiedCount){
-                setLocalReview(localReview+1);
+                // setLocalReview(localReview+1);
+                refetch()
                 toast.success('reviewed successfully..')
             }
         })
         .catch(error=>toast.error(error.message))
     }
-    console.log(localReview)
     return (
         <div className=" bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
             {/* Tutor Image */}
@@ -42,10 +42,10 @@ const PrivateTutorCard = ({tutor}) => {
                 </p>
 
                 {/* Review */}
-                <p> <span className="font-medium">Review:</span> <span className="flex items-center gap-2"><FaStar></FaStar>{localReview}</span></p>
+                <p> <span className="font-medium">Review:</span> <span className="flex items-center gap-2"><FaStar></FaStar>{review}</span></p>
                 <button
                     onClick={handleReview}
-                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
+                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600  font-semibold py-2 px-4 rounded-lg"
                 >
                     Review
                 </button>
@@ -55,5 +55,6 @@ const PrivateTutorCard = ({tutor}) => {
 };
 PrivateTutorCard.propTypes = {
     tutor: PropTypes.object.isRequired,
+    refetch:PropTypes.func 
 };
 export default PrivateTutorCard;

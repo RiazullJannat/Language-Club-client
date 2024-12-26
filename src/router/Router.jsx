@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         path: '/findTutors',
         element: <FindTutors></FindTutors>,
         loader: async () => {
-          const response = axios.get(`${import.meta.env.VITE_BASE_URL}/tutors`);
+          const response = axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors`);
           return (await response).data
         }
       },
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         path: '/findTutors/:category',
         element: <FindTutors></FindTutors>,
         loader: async ({ params }) => {
-          const response = axios.get(`${import.meta.env.VITE_BASE_URL}/tutors?category=${params.category}`)
+          const response = axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors?category=${params.category}`)
           return (await response).data
         }
       },
@@ -44,7 +44,6 @@ const router = createBrowserRouter([
         path: '/tutor/:details',
         element: <Private><TutorDetails></TutorDetails></Private>,
         loader: async ({ params }) => {
-          console.log("params:",params.details)
           const response = axios.get(`${import.meta.env.VITE_BASE_URL}/find-tutors?id=${params.details}`,{withCredentials:true})
           return (await response).data
         }

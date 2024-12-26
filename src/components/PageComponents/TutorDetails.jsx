@@ -21,7 +21,6 @@ const TutorDetails = () => {
             description,
             bookBy:user.email,
         }
-        console.log(data)
         axios.post(`${import.meta.env.VITE_BASE_URL}/book-tutor`, data)
         .then(()=>{
             toast.success('added successfully')

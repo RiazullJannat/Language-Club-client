@@ -43,19 +43,16 @@ const AuthProvider = ({ children }) => {
             if(currentUser?.email){
                 const user = {email:currentUser.email}
                 axios.post(`${import.meta.env.VITE_BASE_URL}/login`,user,{withCredentials:true})
-                .then(res =>{ 
-                    console.log(res.data)
+                .then(()=>{ 
                     setAuthLoading(false)
                 })
             }
             else{
                 axios.post(`${import.meta.env.VITE_BASE_URL}/logout`,{},{withCredentials:true})
-                .then(res=>{
-                    console.log(res.data)
+                .then(()=>{
                     setAuthLoading(false)
                 })
             }
-            console.log("current user:--->", currentUser)
         })
         return () => { unSubscribe() };
     }, [auth])

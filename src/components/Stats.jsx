@@ -9,10 +9,9 @@ const getUserTutor = async () => {
 }
 const Stats = () => {
     const {data:userTutor=[], isLoading, isError, error} = useQuery({
-        queryKey:'UserTutor',
+        queryKey:['UserTutor'],
         queryFn:getUserTutor,
     })
-    console.log(userTutor)
     const stats = [
         { value: `${userTutor.tutorCount}+`, label: "Experienced tutors" },
         { value: `${userTutor.totalReviewCount}+`, label: "Total reviews" },
