@@ -31,6 +31,9 @@ const Navbar = () => {
             <li><NavLink to={'/addTutorials'}>Add Tutorials</NavLink></li>
             <li><NavLink to={'/myTutorials'}>My Tutorials</NavLink></li>
             <li><NavLink to={'/myBookedTutors'}>My Booked Tutors</NavLink></li>
+            <p className="md:hidden gap-3 text-base font-bold block">
+                <Link to={'/login'}>Login</Link> or <Link to={'/register'}>Register</Link>
+            </p>
         </>
     const auth = user ?
         <div className='dropdown dropdown-end z-50'>
@@ -51,6 +54,7 @@ const Navbar = () => {
                 tabIndex={0}
                 className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'
             >
+                <li>{user.displayName}</li>
                 <li className='mt-2'>
                     <button
                         onClick={logOut}
@@ -62,7 +66,7 @@ const Navbar = () => {
             </ul>
         </div> :
         <div>
-            <p className="flex gap-3 text-base font-bold">
+            <p className="md:flex gap-3 text-base font-bold hidden">
                 <Link to={'/login'}>Login</Link> or <Link to={'/register'}>Register</Link>
             </p>
         </div>
@@ -106,10 +110,10 @@ const Navbar = () => {
                     <input type="checkbox" onChange={onToggle} checked={theme === 'light' ? false : true}/>
 
                     {/* sun icon */}
-                    <RxSun className="swap-on h-10 w-10 fill-current" />
+                    <RxSun className="swap-on h-10 w-4 md:w-6 fill-current" />
 
                     {/* moon icon */}
-                    <FaRegMoon className="swap-off h-10 w-10 fill-current" />
+                    <FaRegMoon className="swap-off h-10 w-4 md:w-6 fill-current" />
                 </label>
             </div>
         </div>

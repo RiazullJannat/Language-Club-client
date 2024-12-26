@@ -1,6 +1,5 @@
 import axios from "axios";
 import PropTypes from "prop-types"; 
-// import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 const setReview = async (tutorId) => {
@@ -9,12 +8,10 @@ const setReview = async (tutorId) => {
 }
 const PrivateTutorCard = ({tutor, refetch}) => {
     const {tutor_id, image, price, language, name, review}=tutor;
-    // const [localReview, setLocalReview] = useState(review);
     const handleReview = () => {
         setReview(tutor_id)
         .then(res=>{
             if(res.data.modifiedCount){
-                // setLocalReview(localReview+1);
                 refetch()
                 toast.success('reviewed successfully..')
             }
