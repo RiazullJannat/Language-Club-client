@@ -17,8 +17,7 @@
 5. [Configuration](#configuration)  
 6. [Usage](#usage)  
 7. [Environment Variables](#environment-variables)  
-8. [Contributors](#contributors)  
-9. [License](#license)  
+8. [Contributors](#contributors)
 
 ---
 
